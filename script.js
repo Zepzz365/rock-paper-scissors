@@ -24,51 +24,78 @@ let computerScore = 0
 function playRound(humanChoice, computerChoice){
     humanChoice = humanChoice.toLowerCase()
     if (humanChoice == "rock" && computerChoice == "rock"){
-        console.log("Tie, no points, comp choseed rock")
+        play.textContent = ("Tie, no points, comp chose rock")
     }
     if (humanChoice == "paper" && computerChoice == "rock"){
-        console.log("You win, comp choseed rock")
+        play.textContent =("You win, comp chose rock")
         humanScore += 1
     }
     if (humanChoice == "scissors" && computerChoice == "rock"){
-        console.log("You lose, comp choseed rock")
+        play.textContent =("You lose, comp chose rock")
         computerScore += 1
     }
     if (humanChoice == "rock" && computerChoice == "paper"){
-        console.log("You lose, comp choseed paper")
+        play.textContent =("You lose, comp chose paper")
         computerScore += 1
     }
     if (humanChoice == "paper" && computerChoice == "paper"){
-        console.log("Tie, no points, comp choseed paper")
+        play.textContent =("Tie, no points, comp chose paper")
     }
     if (humanChoice == "scissors" && computerChoice == "paper"){
-        console.log("You win, comp choseed paper")
+        play.textContent =("You win, comp chose paper")
         humanScore += 1
     }
     if (humanChoice == "rock" && computerChoice == "scissors"){
-        console.log("You win, comp choseed scissors")
+        play.textContent =("You win, comp chose scissors")
         humanScore += 1
     }
     if (humanChoice == "paper" && computerChoice == "scissors"){
-        console.log("You lose, comp choseed scissors")
+        play.textContent =("You lose, comp chose scissors")
         computerScore += 1
     }
     if (humanChoice == "scissors" && computerChoice == "scissors"){
-        console.log("Tie, no points, comp choseed scissors")
+        play.textContent =("Tie, no points, comp chose scissors")
     }
-    
-    
 }
 
-function playGame(){
-    let humanSelection
-    let computerSelection
-    for (let i=0; i <=4;i++){
-        humanSelection = getHumanChoice();
-        computerSelection = getComputerChoice();
-
-        playRound(humanSelection, computerSelection);
-    }
-    console.log("human score: " + humanScore + ", computer score: " + computerScore)
+const buttons = document.querySelector(".buttons")
+const score = document.querySelector(".score")
+const play = document.querySelector(".round")
+const btns = document.querySelectorAll(".button")
+function disableButtons(){
+    btns.forEach(btn => btn.disabled= true )
 }
-playGame()
+function enableButtons(){
+    btns.forEach(btn => btn.disabled = false)
+}
+buttons.addEventListener("click" , (e) => {
+    let humanChoice = e.target.textContent
+    let computerChoice = getComputerChoice()
+    playRound(humanChoice, computerChoice)
+    score.textContent = `Human: ${humanScore}, Computer: ${computerScore}`
+    if (humanScore == 5 || computerScore == 5){
+        disableButtons()
+        let winner
+        if (humanScore > computerScore){
+            winner = "human"
+        }else{
+            winner = "computer"
+        }
+        score.textContent = `Human: ${humanScore}, Computer: ${computerScore} => Winner is ${winner}, Click button to restart`
+        const btn = document.createElement("button")
+        btn.textContent = "Restart"
+        const body = document.querySelector("body")
+        btn.style.display = "block"
+        btn.style.margin = "20px auto"
+        btn.style.textAlign = "center"
+        body.appendChild(btn)
+        btn.addEventListener("click", () =>{
+            humanScore = 0
+            computerScore = 0
+            enableButtons()
+            btn.remove()
+            score.textContent = `Human: ${humanScore}, Computer: ${computerScore}`
+            play.textContent = ""
+        })
+}
+})
